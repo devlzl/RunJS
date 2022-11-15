@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RunJS</title>
+    <style>
+        * {
+            font-family: Menlo;
+            box-sizing: border-box;
+        }
+        body {
+            text-align: center;
+        }
+        .demo {
+            width: 400px;
+            margin: 0 auto;
+        }
+        .tab {
+            display: flex;
+            width: 100%;
+            height: 40px;
+            line-height: 40px;
+            border: 1px solid black;
+            border-bottom: none;
+            background-color: lightgray;
+        }
+        .item {
+            width: 100px;
+            height: 100%;
+            cursor: pointer;
+        }
+        .item:hover {
+            background-color: white;
+        }
+        .active {
+            background-color: white;
+        }
+        #code {
+            width: 100%;
+            height: 445px;
+            resize: none;
+            font-size: 18px;
+            padding: 10px 20px;
+        }
+        #run {
+            font-size: 24px;
+            width: 100px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>RunJS</h1>
+    <h2>Small JavaScript engine written in JavaScript.</h2>
+    <div class="demo">
+        <div class="tab">
+            <div class="item active" data-index="0">basic</div>
+            <div class="item" data-index="1">statement</div>
+            <div class="item" data-index="2">scope</div>
+            <div class="item" data-index="3">function</div>
+        </div>
+        <textarea id="code"></textarea>
+        <button id="run">Run</button>
+        <div>check the console for the result</div>
+    </div>
+
+<script type="module">
+import { run } from './main.js'
+
+let basicDemo = `
+let number = 123;
+let string = "Hello";
+let object = {
+    a: 111,
+    b: 'foo',
+    c: false,
+    d: null
+};
+let result = 1 + 2 * 3;
+
+log(number);
+log(string);
+log(object.c);
+log(result);
+`
+
+let statementDemo = `
+let a = 1;
+let b = 2;
+let c = 3;
+if (a < b && b < c) {
+    log('foo');
+} else {
+    log('bar');
+}
+
+let i = 0;
+while (true) {
+    if (i > 5) {
+        break;
+    }
+    i = i + 1;
+}
+log(i);
+`
+
+let scopeDemo = `
+let x = 1;
+if (true) {
+    x = 2;
+    let y = 5;
+    log('inner', x, y);
+}
+log('outer', x, y);
+`
+
+let functionDemo = `
+function add(a, b) {
+    log(a, b);
+    return a + b;
+}
+let result = add(1, 2);
+log(result);
+
+let x = 1;
+function foo() {
+    log(x);
+}
+if (true) {
+    let x = 2;
+    foo();
+}
+`
+
+let demos = [basicDemo, statementDemo, scopeDemo, functionDemo].map(item => item.trim())
+
+
+let code = document.querySelector('#code')
+let tab = document.querySelector('.tab')
+tab.addEventListener('click', (event) => {
+    let target = event.target
+    if (target.classList.contains('item')) {
+        let index = Number(event.target.dataset.index)
+        let active = document.querySelector('.active').classList.remove('active')
+        target.classList.add('active')
+        code.value = demos[index]
+    }
+})
+code.value = demos[0]
+
+let runButton = document.querySelector('#run')
+runButton.addEventListener('click', () => {
+    run(code.value)
+})
+</script>  
+</body>
+</html>
