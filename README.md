@@ -5,7 +5,7 @@ RunJS is a small JavaScript engine written in JavaScript,  no external dependenc
 
 It includes a set of classic JavaScript features in reference to the ECMA-262 Language Specification.
 
-[Online Demo](https://lzlme.github.io/RunJS/)  
+[Online Demo](https://devlzl.github.io/RunJS/)  
 
 
 ##  2. Usage
